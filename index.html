@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生物 重要用語クイズ（全43問）</title>
+    <style>
+        :root {
+            --primary-color: #e53e3e;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .menu-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        select, button {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e0;
+            font-size: 0.95rem;
+        }
+
+        select {
+            flex: 1;
+            background-color: white;
+        }
+
+        .btn-setting {
+            background-color: #4a5568;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-setting:hover {
+            background-color: #2d3748;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: #718096;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .prompt-title {
+            font-size: 0.85rem;
+            color: #e53e3e;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #fff5f5;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .answer-box {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            background-color: #fff0f0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            margin-bottom: 15px;
+            border: 2px dashed #feb2b2;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background-color: #ffffff;
+            border: 2px solid #e2e8f0;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.4;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #fff5f5;
+        }
+
+        .option-btn.correct {
+            background-color: #c6f6d5 !important;
+            border-color: var(--success-color) !important;
+            color: #22543d;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fed7d7 !important;
+            border-color: var(--error-color) !important;
+            color: #742a2a;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+        }
+
+        .btn-action {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-action:hover {
+            background-color: #c53030;
+        }
+
+        .feedback {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .feedback.incorrect {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+
+        .btn-next {
+            background-color: #4a5568;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-next:hover {
+            background-color: #2d3748;
+        }
+
+        #settingsModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .results-box {
+            background-color: #fffaf0;
+            border: 1px solid #fbd38d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .results-box h3 {
+            color: #c05621;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>生物 重要用語クイズ</h1>
+    </header>
+
+    <div class="menu-bar">
+        <select id="modeSelect" onchange="restartQuiz()">
+            <option value="1">1. 単語カード（用語 ➔ 説明）</option>
+            <option value="2">2. 内容カード（説明 ➔ 用語）</option>
+            <option value="3">3. 意味から単語を選ぶ（4択）</option>
+            <option value="4">4. 単語から意味を選ぶ（4択）</option>
+            <option value="5">5. 意味に合う単語を入力</option>
+        </select>
+        <button class="btn-setting" onclick="openSettings()">問題選択</button>
+    </div>
+
+    <!-- クイズカード -->
+    <div class="card" id="quizCard">
+        <div class="question-number" id="qNumber">問題 1 / --</div>
+        <div class="prompt-title" id="pTitle">【問題】</div>
+        <div class="question-text" id="qText">読み込み中...</div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <!-- モード1 & 2: カードめくり用 -->
+        <div id="card-area" style="display: none;">
+            <button class="btn-action" onclick="toggleCardAnswer()" id="cardBtn">答えを表示</button>
+            <div class="answer-box" id="cardAnswerBox"></div>
+        </div>
+
+        <!-- モード3 & 4: 4択用 -->
+        <div id="choices-area" style="display: none;">
+            <div class="options-grid" id="optionsGrid"></div>
+        </div>
+
+        <!-- モード5: 入力用 -->
+        <div id="input-area" style="display: none;">
+            <div class="input-group">
+                <input type="text" id="userInput" placeholder="用語を入力（漢字・ひらがな）" onkeydown="if(event.key==='Enter') checkInputAnswer()">
+                <button class="btn-action" style="width: auto;" onclick="checkInputAnswer()">回答</button>
+            </div>
+        </div>
+
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="display: none;">次の問題へ ➔</button>
+    </div>
+
+    <!-- 結果・間違えた問題表示用 -->
+    <div class="card" id="resultCard" style="display: none;">
+        <h2>🎉 1周クリアお疲れ様でした！</h2>
+        <p id="scoreText" style="font-size: 1.1rem; font-weight: bold;"></p>
+        
+        <div class="results-box" id="wrongListContainer" style="display: none;">
+            <h3>📝 今回間違えてしまった単語リスト</h3>
+            <p>次の復習に役立てましょう！</p>
+            <ul id="wrongList" style="padding-left: 20px; line-height: 1.6;"></ul>
+        </div>
+
+        <button class="btn-action" style="margin-top: 15px;" onclick="restartQuiz()">もう一度挑戦する</button>
+    </div>
+</div>
+
+<!-- 問題選択モーダル -->
+<div id="settingsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 style="margin:0;">出題する問題の選択</h3>
+            <button onclick="closeSettings()" style="padding: 5px 10px; cursor: pointer;">✕ 閉じる</button>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <button onclick="toggleAllCheck(true)" style="padding: 5px 10px; font-size: 0.85rem;">すべて選択</button>
+            <button onclick="toggleAllCheck(false)" style="padding: 5px 10px; font-size: 0.85rem;">すべて解除</button>
+        </div>
+        <div id="checkboxList"></div>
+        <button class="btn-action" style="margin-top: 15px;" onclick="saveSettings()">設定を保存して再スタート</button>
+    </div>
+</div>
+
+<script>
+    // 全43問のデータ (母細胞・娘細胞を追加)
+    const allQuizData = [
+        // 第1章 (29問)
+        { id: 1, chapter: "ch1", term: "形質", aliases: ["けいしつ"], desc: "生物がもつ形や性質などの特徴。" },
+        { id: 2, chapter: "ch1", term: "遺伝", aliases: ["いでん"], desc: "親の形質が子やそれ以外の世代に受け継がれる現象。" },
+        { id: 3, chapter: "ch1", term: "遺伝情報", aliases: ["いでんじょうほう"], desc: "親から子へと伝わる形質を決める情報。" },
+        { id: 4, chapter: "ch1", term: "DNA", aliases: ["DNA", "デオキシリボ核酸", "でおきしりぼかくさん"], desc: "遺伝子の本体。" },
+        { id: 5, chapter: "ch1", term: "遺伝子", aliases: ["いでんし"], desc: "生命活動や形質に関わる重要な遺伝情報をもつDNAの領域。" },
+        { id: 6, chapter: "ch1", term: "形質転換", aliases: ["けいしつてんかん"], desc: "細胞の外からDNAが入り、細胞の遺伝的性質が変化すること。" },
+        { id: 7, chapter: "ch1", term: "ヌクレオチド", aliases: ["ぬくれおちど"], desc: "リン酸・糖・塩基からできているDNAの構成単位。" },
+        { id: 8, chapter: "ch1", term: "糖", aliases: ["とう"], desc: "グルコースなどのように炭素・水素・酸素で構成される物質。デオキシリボースは糖である。" },
+        { id: 9, chapter: "ch1", term: "リン酸", aliases: ["りんさん"], desc: "ATP, ADP, DNAなどを構成するリン(P)を含む物質。" },
+        { id: 10, chapter: "ch1", term: "塩基", aliases: ["えんき"], desc: "ヌクレオチドを構成する物質で、アデニン・チミン・グアニン・シトシンなどがある。" },
+        { id: 11, chapter: "ch1", term: "デオキシリボース", aliases: ["でおきしりぼーす"], desc: "DNAのヌクレオチドを構成する糖。" },
+        { id: 12, chapter: "ch1", term: "塩基対", aliases: ["えんきたい"], desc: "塩基どうしが結合して対になった1組。AとT、GとCが塩基対をつくる。" },
+        { id: 13, chapter: "ch1", term: "相補性", aliases: ["そうほせい"], desc: "DNAの塩基のAとT、GとCが、相補的に結合する性質。" },
+        { id: 14, chapter: "ch1", term: "二重らせん構造", aliases: ["にじゅうらせんこうぞう"], desc: "対になった2本のヌクレオチド鎖がねじれてらせん状になったDNAの構造。" },
+        { id: 15, chapter: "ch1", term: "塩基配列", aliases: ["えんきはいれつ"], desc: "塩基の並び順。" },
+        { id: 16, chapter: "ch1", term: "複製", aliases: ["ふくせい", "DNA複製"], desc: "もとのDNAと同じ塩基配列をもつDNAがもう1組つくられること。" },
+        { id: 17, chapter: "ch1", term: "半保存的複製", aliases: ["はんほぞんてきふくせい"], desc: "一方はもとの鎖のままで、もう一方は新しくつくられる複製の方法。" },
+        { id: 18, chapter: "ch1", term: "染色体", aliases: ["せんしょくたい"], desc: "DNA分子とタンパク質を含む構造。酢酸カーミンや酢酸オルセインなどでよく染まる。" },
+        { id: 19, chapter: "ch1", term: "相同染色体", aliases: ["そうどうせんしょくたい"], desc: "形や大きさが同じ1対の染色体。" },
+        { id: 20, chapter: "ch1", term: "体細胞分裂", aliases: ["たいさいぼうぶんれつ"], desc: "体をつくる細胞がふえるときに行われる細胞の分裂。" },
+        { id: 21, chapter: "ch1", term: "減数分裂", aliases: ["げんすうぶんれつ"], desc: "卵や精子がつくられるときに行われる細胞の分裂。染色体数が半減する。" },
+        { id: 22, chapter: "ch1", term: "母細胞", aliases: ["ぼさいぼう"], desc: "細胞分裂の元になる細胞。" },
+        { id: 23, chapter: "ch1", term: "娘細胞", aliases: ["じょうさいぼう"], desc: "細胞分裂によってできた新しい細胞。" },
+        { id: 24, chapter: "ch1", term: "細胞周期", aliases: ["さいぼうしゅうき"], desc: "細胞分裂の周期的な過程。分裂期(M期)と間期に分けられる。" },
+        { id: 25, chapter: "ch1", term: "分裂期", aliases: ["ぶんれつき", "M期", "ｍ期"], desc: "分裂が行われている時期。前期、中期、後期、終期に分けられる。" },
+        { id: 26, chapter: "ch1", term: "間期", aliases: ["かんき"], desc: "分裂が終わってから次の分裂が始まるまでの時期。G1期、S期、G2期に分けられる。" },
+        { id: 27, chapter: "ch1", term: "G1期", aliases: ["G1期", "g1期", "DNA合成準備期"], desc: "M期が終わってからS期が始まるまでのDNA合成の準備をする時期。" },
+        { id: 28, chapter: "ch1", term: "S期", aliases: ["S期", "s期", "DNA合成期"], desc: "DNAの複製が起きる時期。" },
+        { id: 29, chapter: "ch1", term: "G2期", aliases: ["G2期", "g2期", "分裂準備期"], desc: "S期が終わってからM期が始まるまでの分裂の準備をする時期。" },
+
+        // 第2章 (14問)
+        { id: 30, chapter: "ch2", term: "タンパク質", aliases: ["たんぱくしつ"], desc: "鎖状につながったアミノ酸で構成される物質。種類ごとにアミノ酸の配列が決まっている。" },
+        { id: 31, chapter: "ch2", term: "発現", aliases: ["はつげん"], desc: "遺伝子がもつ情報をもとにしてタンパク質が合成されること。" },
+        { id: 32, chapter: "ch2", term: "アミノ酸", aliases: ["あみのさん"], desc: "タンパク質を構成する物質。" },
+        { id: 33, chapter: "ch2", term: "RNA", aliases: ["RNA", "リボ核酸", "りぼかくさん"], desc: "リボースをもち、塩基としてウラシル(U)などをもつ分子。" },
+        { id: 34, chapter: "ch2", term: "リボース", aliases: ["りぼーす"], desc: "RNAのヌクレオチドを構成する糖。" },
+        { id: 35, chapter: "ch2", term: "転写", aliases: ["てんしゃ"], desc: "DNAの塩基配列を写し取ってRNAがつくられる過程。" },
+        { id: 36, chapter: "ch2", term: "mRNA", aliases: ["mRNA", "mrna", "伝令RNA", "でんれいRNA"], desc: "タンパク質に翻訳される塩基配列をもつRNA。" },
+        { id: 37, chapter: "ch2", term: "翻訳", aliases: ["ほんやく"], desc: "mRNAの塩基配列にもとづいてアミノ酸が並び、タンパク質が合成される過程。" },
+        { id: 38, chapter: "ch2", term: "コドン", aliases: ["こどん"], desc: "特定のアミノ酸を指定する、mRNAの3つ一組の塩基。" },
+        { id: 39, chapter: "ch2", term: "tRNA", aliases: ["tRNA", "trna", "転移RNA", "てんいRNA"], desc: "アミノ酸を運ぶRNA。" },
+        { id: 40, chapter: "ch2", term: "アンチコドン", aliases: ["あんちこどん"], desc: "tRNAがもつ3つ一組の塩基。mRNAのコドンと相補的に結合する。" },
+        { id: 41, chapter: "ch2", term: "セントラルドグマ", aliases: ["せんとらるどぐま"], desc: "DNAからRNAを経てタンパク質へ、一方向に遺伝情報が流れるという考え。" },
+        { id: 42, chapter: "ch2", term: "ゲノム", aliases: ["げのむ"], desc: "真核生物では、体細胞がもつ1対の相同染色体のうち一方の組に含まれるすべての遺伝情報。" },
+        { id: 43, chapter: "ch2", term: "分化", aliases: ["ぶんか"], desc: "細胞が特定の形や働きをもつようになること。" }
+    ];
+
+    let activeStatus = {};
+    allQuizData.forEach(q => activeStatus[q.id] = true);
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let wrongAnswers = [];
+    let isAnswered = false;
+
+    function restartQuiz() {
+        document.getElementById('resultCard').style.display = 'none';
+        document.getElementById('quizCard').style.display = 'block';
+
+        currentQuestions = allQuizData.filter(q => activeStatus[q.id]);
+        
+        if (currentQuestions.length === 0) {
+            alert("出題する問題が選択されていません。「問題選択」からチェックを入れてください。");
+            openSettings();
+            return;
+        }
+
+        currentQuestions.sort(() => Math.random() - 0.5);
+        currentIndex = 0;
+        wrongAnswers = [];
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentIndex >= currentQuestions.length) {
+            showResults();
+            return;
+        }
+
+        isAnswered = false;
+        const mode = document.getElementById('modeSelect').value;
+        const q = currentQuestions[currentIndex];
+
+        document.getElementById('card-area').style.display = 'none';
+        document.getElementById('choices-area').style.display = 'none';
+        document.getElementById('input-area').style.display = 'none';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+
+        document.getElementById('qNumber').textContent = `問題 ${currentIndex + 1} / ${currentQuestions.length}`;
+
+        if (mode === '1') {
+            document.getElementById('pTitle').textContent = '【用語】';
+            document.getElementById('qText').textContent = q.term;
+            document.getElementById('cardAnswerBox').textContent = q.desc;
+            document.getElementById('cardAnswerBox').style.display = 'none';
+            document.getElementById('cardBtn').textContent = '答え（説明）を表示';
+            document.getElementById('card-area').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+        } else if (mode === '2') {
+            document.getElementById('pTitle').textContent = '【説明（内容）】';
+            document.getElementById('qText').textContent = q.desc;
+            document.getElementById('cardAnswerBox').textContent = q.term;
+            document.getElementById('cardAnswerBox').style.display = 'none';
+            document.getElementById('cardBtn').textContent = '答え（用語）を表示';
+            document.getElementById('card-area').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'block';
+        } else if (mode === '3') {
+            document.getElementById('pTitle').textContent = '【説明に当てはまる用語を選んでください】';
+            document.getElementById('qText').textContent = q.desc;
+            document.getElementById('choices-area').style.display = 'block';
+            setupChoices('term', q.term);
+        } else if (mode === '4') {
+            document.getElementById('pTitle').textContent = '【用語の説明として正しいものを選んでください】';
+            document.getElementById('qText').textContent = q.term;
+            document.getElementById('choices-area').style.display = 'block';
+            setupChoices('desc', q.desc);
+        } else if (mode === '5') {
+            document.getElementById('pTitle').textContent = '【説明に合う用語を入力してください】';
+            document.getElementById('qText').textContent = q.desc;
+            document.getElementById('userInput').value = '';
+            document.getElementById('input-area').style.display = 'block';
+        }
+    }
+
+    function toggleCardAnswer() {
+        const box = document.getElementById('cardAnswerBox');
+        const btn = document.getElementById('cardBtn');
+        if (box.style.display === 'none') {
+            box.style.display = 'block';
+            btn.textContent = '答えを隠す';
+        } else {
+            box.style.display = 'none';
+            btn.textContent = '答えを表示';
+        }
+    }
+
+    function setupChoices(type, correctAnswer) {
+        const grid = document.getElementById('optionsGrid');
+        grid.innerHTML = '';
+
+        const otherItems = allQuizData.filter(item => item[type] !== correctAnswer);
+        otherItems.sort(() => Math.random() - 0.5);
+        const dummyChoices = otherItems.slice(0, 3).map(item => item[type]);
+
+        const choices = [correctAnswer, ...dummyChoices];
+        choices.sort(() => Math.random() - 0.5);
+
+        choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = choice;
+            btn.onclick = () => checkChoiceAnswer(btn, choice, correctAnswer);
+            grid.appendChild(btn);
+        });
+    }
+
+    function checkChoiceAnswer(selectedBtn, selectedChoice, correctAnswer) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const buttons = document.querySelectorAll('.option-btn');
+        const feedback = document.getElementById('feedback');
+        const q = currentQuestions[currentIndex];
+
+        buttons.forEach(btn => {
+            if (btn.textContent === correctAnswer) {
+                btn.classList.add('correct');
+            }
+        });
+
+        if (selectedChoice === correctAnswer) {
+            feedback.textContent = '⭕ 正解！';
+            feedback.className = 'feedback correct';
+        } else {
+            selectedBtn.classList.add('incorrect');
+            feedback.textContent = `❌ 不正解... (正解: ${correctAnswer})`;
+            feedback.className = 'feedback incorrect';
+            wrongAnswers.push(q);
+        }
+
+        feedback.style.display = 'block';
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function checkInputAnswer() {
+        if (isAnswered) return;
+        const inputVal = document.getElementById('userInput').value.trim();
+        if (!inputVal) return;
+
+        isAnswered = true;
+        const q = currentQuestions[currentIndex];
+        const feedback = document.getElementById('feedback');
+
+        const isCorrect = inputVal.toLowerCase() === q.term.toLowerCase() || 
+                          (q.aliases && q.aliases.some(a => a.toLowerCase() === inputVal.toLowerCase()));
+
+        if (isCorrect) {
+            feedback.textContent = `⭕ 正解！ (${q.term})`;
+            feedback.className = 'feedback correct';
+        } else {
+            feedback.textContent = `❌ 不正解... (正解: ${q.term})`;
+            feedback.className = 'feedback incorrect';
+            wrongAnswers.push(q);
+        }
+
+        feedback.style.display = 'block';
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        showQuestion();
+    }
+
+    function showResults() {
+        document.getElementById('quizCard').style.display = 'none';
+        document.getElementById('resultCard').style.display = 'block';
+
+        const total = currentQuestions.length;
+        const correctCount = total - wrongAnswers.length;
+        document.getElementById('scoreText').textContent = 
+            `出題数 ${total}問中、${correctCount}問正解しました！（正答率: ${Math.round((correctCount/total)*100)}%）`;
+
+        const wrongContainer = document.getElementById('wrongListContainer');
+        const wrongList = document.getElementById('wrongList');
+        wrongList.innerHTML = '';
+
+        if (wrongAnswers.length > 0) {
+            wrongContainer.style.display = 'block';
+            const uniqueWrong = [...new Set(wrongAnswers)];
+            uniqueWrong.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.term}</strong>：${item.desc}`;
+                wrongList.appendChild(li);
+            });
+        } else {
+            wrongContainer.style.display = 'none';
+            alert("全問正解です！素晴らしい！");
+        }
+    }
+
+    function openSettings() {
+        const listContainer = document.getElementById('checkboxList');
+        listContainer.innerHTML = '';
+
+        allQuizData.forEach(q => {
+            const div = document.createElement('div');
+            div.className = 'checkbox-item';
+            div.innerHTML = `
+                <input type="checkbox" id="chk_${q.id}" ${activeStatus[q.id] ? 'checked' : ''}>
+                <label for="chk_${q.id}">[${q.chapter === 'ch1' ? '第1章' : '第2章'}] <strong>${q.term}</strong></label>
+            `;
+            listContainer.appendChild(div);
+        });
+
+        document.getElementById('settingsModal').style.display = 'flex';
+    }
+
+    function closeSettings() {
+        document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    function toggleAllCheck(status) {
+        allQuizData.forEach(q => {
+            const chk = document.getElementById(`chk_${q.id}`);
+            if (chk) chk.checked = status;
+        });
+    }
+
+    function saveSettings() {
+        allQuizData.forEach(q => {
+            const chk = document.getElementById(`chk_${q.id}`);
+            if (chk) {
+                activeStatus[q.id] = chk.checked;
+            }
+        });
+        closeSettings();
+        restartQuiz();
+    }
+
+    restartQuiz();
+</script>
+
+</body>
+</html>
